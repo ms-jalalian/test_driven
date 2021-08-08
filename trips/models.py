@@ -2,9 +2,15 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid # new
 from django.shortcuts import reverse # new
+from django.conf import settings
 
 class User(AbstractUser):
-    pass
+    photo = models.ImageField(upload_to='photos', null=True, blank=True) # new
+    
+    @property
+    def group(self):
+        groups = self.groups.all()
+        return groups[0].name if groups else None
 
 class Trip(models.Model): # new
     REQUESTED = 'REQUESTED'
@@ -23,8 +29,24 @@ class Trip(models.Model): # new
     updated = models.DateTimeField(auto_now=True)
     pick_up_address = models.CharField(max_length=255)
     drop_off_address = models.CharField(max_length=255)
+    driver = models.ForeignKey( # new
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='trips_as_driver'
+    )
+    rider = models.ForeignKey( # new
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='trips_as_rider'
+    )
+
     status = models.CharField(
         max_length=20, choices=STATUSES, default=REQUESTED)
+
 
     def __str__(self):
         return f'{self.id}'
