@@ -25,7 +25,7 @@ SECRET_KEY = 'pzy9h+s$5b^db6lt7h#z3)#_c-yiesq%0ligx26x)k^a$9v+o_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['193.176.243.124']
 
 ASGI_APPLICATION = 'taxi.routing.application'
 # Application definition
